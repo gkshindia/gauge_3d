@@ -19,3 +19,9 @@ wheels/
 *.jpeg
 *.png
 *.gif
+
+# model outputs
+*.pth
+*.pt
+*.onnx
+*.npy

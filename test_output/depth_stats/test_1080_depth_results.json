@@ -1,0 +1,159 @@
+{
+  "video_name": "test_1080",
+  "total_frames": 11,
+  "processed_frames": [
+    {
+      "frame_index": 0,
+      "frame_path": "output/frames/1080_60_fps/frame_000001.jpg",
+      "depth_path": "test_output/depth_maps/test_1080/frame_000001_depth.npy",
+      "preview_path": "test_output/depth_previews/test_1080/frame_000001_depth_preview.jpg",
+      "depth_stats": {
+        "min_depth": 0.0,
+        "max_depth": 1.0,
+        "mean_depth": 0.33944986111111114,
+        "std_depth": 0.29651701750184695,
+        "median_depth": 0.216
+      }
+    },
+    {
+      "frame_index": 1,
+      "frame_path": "output/frames/1080_60_fps/frame_000002.jpg",
+      "depth_path": "test_output/depth_maps/test_1080/frame_000002_depth.npy",
+      "preview_path": "test_output/depth_previews/test_1080/frame_000002_depth_preview.jpg",
+      "depth_stats": {
+        "min_depth": 0.0,
+        "max_depth": 1.0,
+        "mean_depth": 0.39414679145204806,
+        "std_depth": 0.32375579196068255,
+        "median_depth": 0.19779249448123623
+      }
+    },
+    {
+      "frame_index": 2,
+      "frame_path": "output/frames/1080_60_fps/frame_000003.jpg",
+      "depth_path": "test_output/depth_maps/test_1080/frame_000003_depth.npy",
+      "preview_path": "test_output/depth_previews/test_1080/frame_000003_depth_preview.jpg",
+      "depth_stats": {
+        "min_depth": 0.0,
+        "max_depth": 1.0,
+        "mean_depth": 0.40237680824543914,
+        "std_depth": 0.3005840887864364,
+        "median_depth": 0.28194795730269645
+      }
+    },
+    {
+      "frame_index": 3,
+      "frame_path": "output/frames/1080_60_fps/frame_000004.jpg",
+      "depth_path": "test_output/depth_maps/test_1080/frame_000004_depth.npy",
+      "preview_path": "test_output/depth_previews/test_1080/frame_000004_depth_preview.jpg",
+      "depth_stats": {
+        "min_depth": 0.0,
+        "max_depth": 1.0,
+        "mean_depth": 0.36557217006730974,
+        "std_depth": 0.32249317918693227,
+        "median_depth": 0.2208735735848584
+      }
+    },
+    {
+      "frame_index": 4,
+      "frame_path": "output/frames/1080_60_fps/frame_000005.jpg",
+      "depth_path": "test_output/depth_maps/test_1080/frame_000005_depth.npy",
+      "preview_path": "test_output/depth_previews/test_1080/frame_000005_depth_preview.jpg",
+      "depth_stats": {
+        "min_depth": 0.0,
+        "max_depth": 1.0,
+        "mean_depth": 0.35100203498054244,
+        "std_depth": 0.330284258516463,
+        "median_depth": 0.2416810715184179
+      }
+    },
+    {
+      "frame_index": 5,
+      "frame_path": "output/frames/1080_60_fps/frame_000006.jpg",
+      "depth_path": "test_output/depth_maps/test_1080/frame_000006_depth.npy",
+      "preview_path": "test_output/depth_previews/test_1080/frame_000006_depth_preview.jpg",
+      "depth_stats": {
+        "min_depth": 0.0,
+        "max_depth": 1.0,
+        "mean_depth": 0.40924563929355884,
+        "std_depth": 0.2955926553929438,
+        "median_depth": 0.40799358473266056
+      }
+    },
+    {
+      "frame_index": 6,
+      "frame_path": "output/frames/1080_60_fps/frame_000007.jpg",
+      "depth_path": "test_output/depth_maps/test_1080/frame_000007_depth.npy",
+      "preview_path": "test_output/depth_previews/test_1080/frame_000007_depth_preview.jpg",
+      "depth_stats": {
+        "min_depth": 0.0,
+        "max_depth": 1.0,
+        "mean_depth": 0.4659782898133343,
+        "std_depth": 0.28967391147970967,
+        "median_depth": 0.5033525285786932
+      }
+    },
+    {
+      "frame_index": 7,
+      "frame_path": "output/frames/1080_60_fps/frame_000008.jpg",
+      "depth_path": "test_output/depth_maps/test_1080/frame_000008_depth.npy",
+      "preview_path": "test_output/depth_previews/test_1080/frame_000008_depth_preview.jpg",
+      "depth_stats": {
+        "min_depth": 0.0,
+        "max_depth": 1.0,
+        "mean_depth": 0.4679298725494195,
+        "std_depth": 0.28911422580435364,
+        "median_depth": 0.5011086812435073
+      }
+    },
+    {
+      "frame_index": 8,
+      "frame_path": "output/frames/1080_60_fps/frame_000009.jpg",
+      "depth_path": "test_output/depth_maps/test_1080/frame_000009_depth.npy",
+      "preview_path": "test_output/depth_previews/test_1080/frame_000009_depth_preview.jpg",
+      "depth_stats": {
+        "min_depth": 0.0,
+        "max_depth": 1.0,
+        "mean_depth": 0.4674561670119489,
+        "std_depth": 0.24258691310531444,
+        "median_depth": 0.496022026315848
+      }
+    },
+    {
+      "frame_index": 9,
+      "frame_path": "output/frames/1080_60_fps/frame_000010.jpg",
+      "depth_path": "test_output/depth_maps/test_1080/frame_000010_depth.npy",
+      "preview_path": "test_output/depth_previews/test_1080/frame_000010_depth_preview.jpg",
+      "depth_stats": {
+        "min_depth": 0.0,
+        "max_depth": 1.0,
+        "mean_depth": 0.4416150473131489,
+        "std_depth": 0.21296196534598197,
+        "median_depth": 0.4520834778696141
+      }
+    },
+    {
+      "frame_index": 10,
+      "frame_path": "output/frames/1080_60_fps/frame_000011.jpg",
+      "depth_path": "test_output/depth_maps/test_1080/frame_000011_depth.npy",
+      "preview_path": "test_output/depth_previews/test_1080/frame_000011_depth_preview.jpg",
+      "depth_stats": {
+        "min_depth": 0.0,
+        "max_depth": 1.0,
+        "mean_depth": 0.37296255203178735,
+        "std_depth": 0.2010180389234511,
+        "median_depth": 0.38507126025531146
+      }
+    }
+  ],
+  "depth_stats": {
+    "min_depth": 0.0,
+    "max_depth": 1.0,
+    "avg_depth": 0.40706683944269534,
+    "depth_range": 1.0
+  },
+  "output_dirs": {
+    "depth_maps": "test_output/depth_maps/test_1080",
+    "previews": "test_output/depth_previews/test_1080"
+  }
+}

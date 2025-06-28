@@ -1,0 +1,21 @@
+# depth_any_video Configuration
+model:
+  name: dav_model
+  input_size: (384, 512)
+  temporal_window: 16
+
+inference:
+  batch_size: 1
+  num_threads: 4
+  use_gpu: true
+  precision: float16
+
+preprocessing:
+  normalize: true
+  resize_method: lanczos
+  maintain_aspect_ratio: true
+
+postprocessing:
+  smooth_temporal: true
+  fill_holes: true
+  median_filter_size: 3
