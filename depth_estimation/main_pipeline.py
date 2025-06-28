@@ -14,7 +14,7 @@ import json
 sys.path.insert(0, str(Path(__file__).parent))
 
 # Import Phase 1 components
-from setup_environment import DepthEnvironmentSetup
+from setup_environment import DepthAnyVideoSetup as DepthEnvironmentSetup
 from video_depth_processor import VideoDepthProcessor, ProcessingConfig, create_default_config
 from depth_pipeline import DepthEstimationPipeline, DepthConfig, create_default_depth_config
 from output_manager import DepthOutputManager, OutputConfig, create_default_output_config

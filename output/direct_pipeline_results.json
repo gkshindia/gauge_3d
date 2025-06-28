@@ -1,0 +1,30 @@
+{
+  "success": true,
+  "processing_time": 1.3552191257476807,
+  "phases": {
+    "gaussian_4d": {
+      "output_dir": "output/gaussian_reconstruction/standard_quality",
+      "num_gaussians": 124318,
+      "num_frames": 10,
+      "processing_time": 1751143064.206932
+    },
+    "transformer": {
+      "output_dir": "output/transformer_enhanced/standard_quality",
+      "num_enhanced_clouds": 0,
+      "error": "Unsupported file format: ",
+      "processing_time": 1751143065.474775
+    }
+  },
+  "output_directories": {
+    "depth_maps": "output/depth_maps/1080_60_fps",
+    "gaussian_reconstruction": "output/gaussian_reconstruction/standard_quality",
+    "transformer_enhanced": "output/transformer_enhanced/standard_quality"
+  },
+  "summary_stats": {
+    "total_frames_processed": 10,
+    "total_gaussians_generated": 124318,
+    "enhancement_applied": false,
+    "pipeline_version": "4.0-direct",
+    "quality_preset": "standard"
+  }
+}

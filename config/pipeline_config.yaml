@@ -38,9 +38,14 @@ depth_estimation:
 # Phase 2: 4D Gaussian Configuration  
 gaussian_4d:
   config_file: "4d_gaussian/config/gaussian_config.py"
-  max_gaussians: 100000
+  max_gaussians: 150000  # Standard quality: 50K-200K per frame
   optimization_iterations: 1000
   temporal_consistency: true
+  
+  # Standard Quality Settings
+  point_cloud_density: 300000  # 100K-500K points per frame
+  gaussian_density_per_frame: 150000  # 50K-200K Gaussians per frame
+  quality_preset: "standard"
   
   # Gaussian Parameters
   initial_learning_rate: 0.01
@@ -62,6 +67,11 @@ transformer:
   enhancement_enabled: true
   p4transformer_model: "placeholder"
   quality_threshold: 0.5
+  
+  # Standard Quality Settings
+  max_points_per_frame: 300000  # 100K-500K points per frame
+  target_gaussians_per_frame: 150000  # 50K-200K Gaussians per frame
+  quality_preset: "standard"
   
   # Enhancement Parameters
   denoising:
