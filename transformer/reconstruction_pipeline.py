@@ -611,6 +611,46 @@ class ReconstructionPipeline:
         
         o3d.io.write_point_cloud(str(ply_file), pcd)
 
+    # Convenience methods for testing and individual operations
+    def reconstruct_gaussians(self, enhanced_point_clouds: List[Dict]) -> List[Dict]:
+        """Wrapper method for the main reconstruct function"""
+        result = self.reconstruct(enhanced_point_clouds)
+        return result.get("frames", [])
+    
+    def point_clouds_to_gaussians(self, point_clouds: List[Dict]) -> List[Dict]:
+        """Convert point clouds to Gaussian representations"""
+        gaussians = []
+        for i, pc in enumerate(point_clouds):
+            gaussian = self._convert_to_gaussians(pc, i)
+            gaussians.append(gaussian)
+        return gaussians
+    
+    def optimize_gaussians(self, gaussians: List[Dict]) -> List[Dict]:
+        """Optimize Gaussian parameters"""
+        # For now, return as-is since optimization is frame-specific
+        # In a full implementation, this would apply cross-frame optimization
+        logger.info(f"Optimizing {len(gaussians)} Gaussian frames")
+        return gaussians
+    
+    def assess_quality(self, gaussians: List[Dict]) -> Dict:
+        """Assess quality of reconstructed Gaussians"""
+        if not gaussians:
+            return {"error": "No Gaussians provided"}
+            
+        total_quality = 0.0
+        frame_qualities = []
+        
+        for gaussian_frame in gaussians:
+            quality = self._calculate_gaussian_quality(gaussian_frame)
+            frame_qualities.append(quality)
+            total_quality += quality
+        
+        return {
+            "average_quality": total_quality / len(gaussians),
+            "frame_qualities": frame_qualities,
+            "num_frames": len(gaussians)
+        }
+
 
 def main():
     """Command line interface for reconstruction pipeline"""

@@ -447,6 +447,27 @@ class EnhancementPipeline:
         
         np.save(filepath, point_cloud["points"])
         logger.debug(f"Saved intermediate result: {filepath}")
+    
+    # Convenience methods for testing and individual operations
+    def enhance_point_clouds(self, point_clouds: List[Dict]) -> List[Dict]:
+        """Wrapper method for the main process function"""
+        return self.process(point_clouds)
+    
+    def denoise_point_cloud(self, point_cloud: Dict) -> Dict:
+        """Apply denoising to a single point cloud"""
+        return self._apply_denoising(point_cloud)
+    
+    def complete_point_cloud(self, point_cloud: Dict) -> Dict:
+        """Apply completion to a single point cloud"""
+        return self._apply_completion(point_cloud)
+    
+    def enhance_features(self, point_cloud: Dict) -> Dict:
+        """Apply feature enhancement to a single point cloud"""
+        return self._enhance_features(point_cloud)
+    
+    def enforce_temporal_consistency(self, point_clouds: List[Dict]) -> List[Dict]:
+        """Apply temporal consistency to a sequence of point clouds"""
+        return self._apply_temporal_consistency(point_clouds)
 
 
 def main():

@@ -1,0 +1,203 @@
+# Gauge 3D Unified Pipeline Configuration
+# Phase 4: Integration and Optimization
+
+pipeline:
+  # Input/Output Configuration
+  input_video_path: "vinput/"
+  output_base_path: "output/"
+  temp_path: "temp/"
+  
+  # General Settings
+  enable_gpu: true
+  batch_size: 4
+  max_frames: null  # null for all frames, number to limit
+  resume_from_checkpoint: true
+  
+  # Memory Management
+  memory_limit_gb: 16
+  gpu_memory_fraction: 0.8
+  enable_memory_monitoring: true
+
+# Phase 1: Depth Estimation Configuration
+depth_estimation:
+  config_file: "depth_estimation/config/dav_config.yaml"
+  model: "depth_anything_v2"
+  frame_skip: 6
+  output_format: "npy"
+  
+  # Processing Options
+  resize_input: true
+  target_resolution: [518, 518]
+  normalize_depth: true
+  
+  # Quality Control
+  min_depth: 0.1
+  max_depth: 100.0
+  depth_consistency_check: true
+
+# Phase 2: 4D Gaussian Configuration  
+gaussian_4d:
+  config_file: "4d_gaussian/config/gaussian_config.py"
+  max_gaussians: 100000
+  optimization_iterations: 1000
+  temporal_consistency: true
+  
+  # Gaussian Parameters
+  initial_learning_rate: 0.01
+  position_learning_rate: 0.00016
+  feature_learning_rate: 0.0025
+  opacity_learning_rate: 0.05
+  scaling_learning_rate: 0.001
+  rotation_learning_rate: 0.001
+  
+  # Quality Control
+  densification_interval: 100
+  opacity_reset_interval: 3000
+  densify_from_iter: 500
+  densify_until_iter: 15000
+
+# Phase 3: Transformer Enhancement Configuration
+transformer:
+  config_file: "transformer/config/transformer_config.yaml"
+  enhancement_enabled: true
+  p4transformer_model: "placeholder"
+  quality_threshold: 0.5
+  
+  # Enhancement Parameters
+  denoising:
+    enabled: true
+    algorithm: "statistical_outlier"
+    outlier_threshold: 2.0
+    neighbor_count: 50
+  
+  completion:
+    enabled: true
+    algorithm: "voxel_based"
+    voxel_size: 0.01
+    max_hole_size: 0.1
+  
+  feature_enhancement:
+    enabled: true
+    edge_sharpening: true
+    surface_smoothing: false
+    detail_preservation: true
+  
+  temporal_consistency:
+    enabled: true
+    consistency_weight: 0.1
+    frame_window: 5
+
+# Phase 4: Integration and Optimization
+integration:
+  # Progress Tracking
+  enable_progress_logging: true
+  checkpoint_interval: 100
+  save_intermediate_results: true
+  
+  # Error Handling
+  continue_on_error: false
+  max_retries: 3
+  fallback_quality_threshold: 0.1
+  
+  # Performance Monitoring
+  enable_profiling: false
+  memory_profiling: true
+  gpu_utilization_monitoring: true
+
+# Validation Configuration
+validation:
+  enable_quality_checks: true
+  enable_progress_saving: true
+  validate_outputs: true
+  
+  # Quality Thresholds
+  min_frames_required: 10
+  min_gaussians_required: 1000
+  max_processing_time_hours: 24
+  
+  # Output Validation
+  check_file_integrity: true
+  validate_data_formats: true
+  ensure_temporal_consistency: true
+
+# Performance Optimization
+performance:
+  # Parallel Processing
+  parallel_processing: true
+  max_workers: null  # null for auto-detection
+  chunk_size: 100
+  
+  # Memory Optimization
+  enable_data_streaming: true
+  cache_size_gb: 4
+  garbage_collection_interval: 1000
+  
+  # GPU Optimization
+  mixed_precision: true
+  gradient_checkpointing: false
+  optimize_memory_usage: true
+
+# Distance Measurement (Phase 4.2)
+distance_measurement:
+  # 3D Point Selection
+  selection_interface: "interactive"
+  snap_to_surface: true
+  selection_tolerance: 0.01
+  
+  # Measurement Parameters
+  unit: "meters"
+  precision: 3
+  enable_measurement_validation: true
+  
+  # Visualization
+  measurement_color: [1.0, 0.0, 0.0]  # RGB
+  line_width: 2
+  point_size: 5
+  show_annotations: true
+
+# Output Configuration
+output:
+  # File Formats
+  depth_format: "npy"
+  point_cloud_format: "ply"
+  gaussian_format: "pth"
+  measurement_format: "json"
+  
+  # Compression
+  enable_compression: true
+  compression_level: 6
+  
+  # Metadata
+  include_metadata: true
+  include_processing_log: true
+  include_configuration: true
+
+# Logging Configuration
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  file: "pipeline.log"
+  max_file_size_mb: 100
+  backup_count: 5
+  
+  # Component-specific logging
+  depth_estimation_level: "INFO"
+  gaussian_4d_level: "INFO"
+  transformer_level: "INFO"
+  integration_level: "DEBUG"
+
+# Development and Testing
+development:
+  # Testing Configuration
+  enable_unit_tests: false
+  enable_integration_tests: false
+  test_data_path: "test_data/"
+  
+  # Debugging
+  save_intermediate_visualizations: false
+  enable_step_by_step_mode: false
+  break_on_error: false
+  
+  # Performance Testing
+  enable_benchmarking: false
+  benchmark_iterations: 3
+  profile_memory_usage: false

@@ -77,24 +77,37 @@ class PointCloudExtractor:
     
     def extract_from_gaussians(
         self, 
-        gaussian_data: Union[str, Path, Dict],
+        gaussian_data: Union[str, Path, Dict, List[Dict]],
         output_dir: Optional[Union[str, Path]] = None
-    ) -> Dict:
+    ) -> List[Dict]:
         """
         Extract point clouds from 4D Gaussian data.
         
         Args:
-            gaussian_data: Path to Gaussian data file or loaded data dict
+            gaussian_data: Path to Gaussian data file, loaded data dict, or list of frame dicts
             output_dir: Directory to save extracted point clouds
             
         Returns:
-            Dictionary containing extracted point clouds and metadata
+            List of point cloud dictionaries
         """
         logger.info("Starting point cloud extraction from 4D Gaussians")
         
         # Load Gaussian data if path provided
         if isinstance(gaussian_data, (str, Path)):
             gaussian_data = self._load_gaussian_data(gaussian_data)
+        
+        # Handle different input formats
+        if isinstance(gaussian_data, list):
+            # List of frame data dicts
+            frames_data = gaussian_data
+        elif isinstance(gaussian_data, dict) and "frames" in gaussian_data:
+            # Dict with frames key
+            frames_data = gaussian_data["frames"]
+        elif isinstance(gaussian_data, dict):
+            # Single frame dict
+            frames_data = [gaussian_data]
+        else:
+            raise ValueError(f"Unsupported gaussian_data type: {type(gaussian_data)}")
         
         # Extract point clouds frame by frame
         point_clouds = []
@@ -105,7 +118,7 @@ class PointCloudExtractor:
             "temporal_consistency": 0.0
         }
         
-        for frame_idx, frame_data in enumerate(gaussian_data.get("frames", [])):
+        for frame_idx, frame_data in enumerate(frames_data):
             logger.debug(f"Extracting frame {frame_idx}")
             
             # Extract point cloud from Gaussian parameters
@@ -329,6 +342,27 @@ class PointCloudExtractor:
             json.dump(serializable_metadata, f, indent=2)
         
         logger.info("Point cloud extraction complete")
+
+    # Public wrapper methods for testing and external use
+    def calculate_quality_metrics(self, point_cloud: Dict) -> Dict:
+        """Calculate quality metrics for a point cloud"""
+        quality_score = self._calculate_quality_score(point_cloud)
+        
+        # Calculate density using same logic as in quality score
+        points = point_cloud.get('points', [])
+        density = min(len(points) / self.config["max_points_per_frame"], 1.0) if len(points) > 0 else 0.0
+        
+        # Simple temporal consistency (for single frame, return 1.0)
+        consistency = 1.0
+        
+        return {
+            "overall_quality": quality_score,
+            "point_density": density,
+            "temporal_consistency": consistency,
+            "num_points": len(points),
+            "has_colors": 'colors' in point_cloud,
+            "has_normals": 'normals' in point_cloud
+        }
 
 
 def main():
