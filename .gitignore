@@ -13,3 +13,9 @@ wheels/
 *.mp4
 *.avi
 *.mkv
+
+# imageFiles
+*.jpg
+*.jpeg
+*.png
+*.gif
