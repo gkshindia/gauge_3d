@@ -1,0 +1,239 @@
+# Enhancement Pipeline Configuration
+# Detailed settings for the point cloud enhancement pipeline
+
+# Pipeline Stages Configuration
+pipeline_stages:
+  - name: "denoising"
+    enabled: true
+    order: 1
+  - name: "outlier_removal"
+    enabled: true
+    order: 2
+  - name: "completion"
+    enabled: true
+    order: 3
+  - name: "feature_enhancement"
+    enabled: true
+    order: 4
+  - name: "temporal_consistency"
+    enabled: true
+    order: 5
+
+# Denoising Configuration
+denoising:
+  method: "statistical"  # "statistical", "radius", "bilateral", "non_local"
+  
+  statistical_denoising:
+    nb_neighbors: 20
+    std_ratio: 2.0
+    
+  radius_denoising:
+    radius: 0.02
+    min_nb_points: 10
+    
+  bilateral_denoising:
+    sigma_spatial: 0.01
+    sigma_intensity: 0.1
+    
+  non_local_denoising:
+    search_radius: 0.05
+    template_radius: 0.01
+    h_parameter: 0.1
+
+# Outlier Removal Configuration
+outlier_removal:
+  methods:
+    - name: "statistical_outlier"
+      enabled: true
+      nb_neighbors: 20
+      std_ratio: 2.0
+      
+    - name: "radius_outlier"
+      enabled: true
+      nb_points: 10
+      radius: 0.02
+      
+    - name: "isolation_forest"
+      enabled: false
+      contamination: 0.1
+      
+  combine_methods: "intersection"  # "union", "intersection"
+
+# Point Cloud Completion Configuration
+completion:
+  method: "poisson"  # "poisson", "rbf", "moving_least_squares", "neural"
+  
+  poisson_completion:
+    depth: 9
+    scale_factor: 1.1
+    linear_fit: false
+    
+  rbf_completion:
+    radius: 0.05
+    polynomial_degree: 2
+    
+  moving_least_squares:
+    search_radius: 0.03
+    polynomial_order: 2
+    
+  neural_completion:
+    model_path: null
+    batch_size: 1024
+    
+  # Gap detection
+  gap_detection:
+    method: "density_based"  # "density_based", "surface_based"
+    density_threshold: 0.1
+    min_gap_size: 0.01
+    max_fill_distance: 0.05
+
+# Feature Enhancement Configuration
+feature_enhancement:
+  edge_enhancement:
+    enabled: true
+    strength: 0.3
+    detection_method: "gradient"  # "gradient", "laplacian", "harris"
+    
+  surface_enhancement:
+    enabled: true
+    smoothing_strength: 0.1
+    method: "laplacian"  # "laplacian", "taubin", "bilateral"
+    iterations: 3
+    
+  normal_enhancement:
+    enabled: true
+    estimation_method: "pca"  # "pca", "weighted_pca"
+    neighborhood_size: 20
+    orient_normals: true
+    
+  curvature_enhancement:
+    enabled: false
+    curvature_type: "mean"  # "mean", "gaussian", "principal"
+    enhancement_factor: 0.2
+
+# Temporal Consistency Configuration
+temporal_consistency:
+  method: "optical_flow"  # "optical_flow", "correspondence", "smooth_trajectory"
+  
+  optical_flow:
+    max_displacement: 0.1
+    smoothness_weight: 0.5
+    
+  correspondence:
+    max_distance: 0.05
+    correspondence_threshold: 0.8
+    
+  smooth_trajectory:
+    smoothing_window: 5
+    smoothing_weight: 0.2
+    
+  # Motion analysis
+  motion_analysis:
+    enable_motion_detection: true
+    motion_threshold: 0.01
+    static_region_enhancement: true
+    dynamic_region_enhancement: true
+
+# Quality Assessment Configuration
+quality_assessment:
+  metrics:
+    point_cloud_density:
+      enabled: true
+      method: "local_density"
+      neighborhood_radius: 0.02
+      
+    surface_quality:
+      enabled: true
+      method: "surface_variation"
+      estimation_radius: 0.03
+      
+    noise_level:
+      enabled: true
+      method: "local_roughness"
+      
+    completeness:
+      enabled: true
+      method: "hole_detection"
+      
+    temporal_consistency:
+      enabled: true
+      method: "frame_difference"
+
+# Adaptive Processing Configuration
+adaptive_processing:
+  enabled: true
+  
+  # Adapt parameters based on point cloud properties
+  adapt_to_density: true
+  adapt_to_noise: true
+  adapt_to_completeness: true
+  
+  # Density-based adaptation
+  density_adaptation:
+    low_density_threshold: 100  # points per unit volume
+    high_density_threshold: 10000
+    
+    low_density_params:
+      completion_strength: 0.8
+      smoothing_strength: 0.05
+      
+    high_density_params:
+      completion_strength: 0.3
+      smoothing_strength: 0.2
+      
+  # Noise-based adaptation
+  noise_adaptation:
+    low_noise_threshold: 0.01
+    high_noise_threshold: 0.1
+    
+    high_noise_params:
+      denoising_strength: 0.8
+      outlier_removal_aggressiveness: 0.9
+
+# Performance Configuration
+performance:
+  parallel_processing:
+    enabled: true
+    num_threads: 4
+    chunk_size: 1000
+    
+  memory_optimization:
+    enabled: true
+    max_memory_usage: "80%"  # Percentage of available RAM
+    use_memory_mapping: false
+    
+  gpu_acceleration:
+    enabled: "auto"  # true, false, "auto"
+    preferred_device: "cuda:0"
+    fallback_to_cpu: true
+
+# Visualization and Debug Configuration
+visualization:
+  enabled: false
+  
+  save_intermediate_results: false
+  intermediate_formats: ["ply", "npy"]
+  
+  generate_comparison_plots: false
+  plot_quality_metrics: false
+  
+  create_videos: false
+  video_fps: 30
+  video_format: "mp4"
+
+# Advanced Features
+advanced:
+  multi_scale_processing:
+    enabled: false
+    scales: [0.01, 0.02, 0.05]
+    combine_method: "weighted_average"
+    
+  learning_based_enhancement:
+    enabled: false
+    model_path: null
+    fine_tune_on_data: false
+    
+  uncertainty_estimation:
+    enabled: false
+    method: "monte_carlo_dropout"
+    num_samples: 10

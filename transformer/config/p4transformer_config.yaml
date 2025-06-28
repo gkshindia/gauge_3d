@@ -1,0 +1,145 @@
+# P4Transformer Model Configuration
+# Specific configuration for P4Transformer model integration
+
+model:
+  name: "P4Transformer"
+  version: "1.0"
+  architecture: "transformer"
+  
+  # Model Architecture Settings
+  architecture_config:
+    input_dim: 3  # 3D point coordinates
+    hidden_dim: 256
+    num_layers: 6
+    num_heads: 8
+    feedforward_dim: 512
+    dropout: 0.1
+    activation: "gelu"
+    layer_norm: true
+    
+  # Point Cloud Processing Settings
+  point_processing:
+    max_sequence_length: 2048
+    coordinate_normalization: true
+    positional_encoding: true
+    use_local_features: true
+    local_neighborhood_size: 16
+    
+  # Enhancement Settings
+  enhancement:
+    denoising_strength: 0.5
+    completion_strength: 0.7
+    feature_enhancement: 0.3
+    temporal_weight: 0.2
+    
+  # Training Settings (for fine-tuning)
+  training:
+    learning_rate: 1e-4
+    weight_decay: 1e-5
+    warmup_steps: 1000
+    max_steps: 10000
+    batch_size: 8
+    gradient_clip_norm: 1.0
+    
+    # Loss function weights
+    loss_weights:
+      reconstruction: 1.0
+      temporal_consistency: 0.3
+      smoothness: 0.1
+      sparsity: 0.05
+
+# Pre-trained Model Settings
+pretrained:
+  use_pretrained: false  # Set to true when P4Transformer models become available
+  model_path: null  # Path to pre-trained weights
+  model_url: null   # URL to download pre-trained model
+  
+  # Model versions available
+  available_models:
+    - name: "p4transformer-base"
+      parameters: "125M"
+      description: "Base P4Transformer model"
+    - name: "p4transformer-large" 
+      parameters: "350M"
+      description: "Large P4Transformer model"
+
+# Input/Output Processing
+preprocessing:
+  normalize_coordinates: true
+  center_point_cloud: true
+  scale_to_unit_sphere: false
+  remove_outliers: true
+  subsample_method: "random"  # "random", "fps", "uniform"
+  
+postprocessing:
+  denormalize_coordinates: true
+  apply_smoothing: true
+  remove_artifacts: true
+  temporal_filtering: true
+
+# Performance Optimization
+optimization:
+  use_attention_mask: true
+  gradient_checkpointing: false
+  compile_model: false  # PyTorch 2.0 compilation
+  use_torch_script: false
+  
+  # Memory optimization
+  low_memory_mode: false
+  attention_slice_size: null
+  
+# Inference Settings
+inference:
+  batch_size: 4
+  num_workers: 2
+  pin_memory: true
+  prefetch_factor: 2
+  
+  # Quality settings
+  quality_mode: "balanced"  # "fast", "balanced", "high_quality"
+  iterative_refinement: true
+  max_iterations: 3
+  convergence_threshold: 0.01
+
+# Evaluation Metrics
+evaluation:
+  metrics:
+    - "chamfer_distance"
+    - "hausdorff_distance" 
+    - "point_to_surface_distance"
+    - "normal_consistency"
+    - "temporal_smoothness"
+    
+  validation:
+    enable_validation: true
+    validation_split: 0.1
+    validation_frequency: 100  # steps
+
+# Experimental Features
+experimental:
+  enable_experimental: false
+  
+  features:
+    - name: "adaptive_attention"
+      enabled: false
+      description: "Adaptive attention mechanism for varying point densities"
+    
+    - name: "multi_scale_processing"
+      enabled: false
+      description: "Multi-scale point cloud processing"
+      
+    - name: "graph_neural_network"
+      enabled: false
+      description: "Graph neural network integration"
+
+# Debug and Development
+debug:
+  save_intermediate_outputs: false
+  visualize_attention: false
+  profile_performance: false
+  check_gradients: false
+  
+  # Logging specific to P4Transformer
+  log_model_stats: true
+  log_attention_weights: false
+  log_feature_maps: false

@@ -1,0 +1,118 @@
+# Transformer Enhancement Configuration
+# Main configuration file for the transformer enhancement pipeline
+
+# Point Cloud Extraction Settings
+point_cloud_extraction:
+  min_points_per_frame: 1000
+  max_points_per_frame: 50000
+  temporal_consistency_threshold: 0.8
+  quality_threshold: 0.5
+  voxel_size: 0.01
+  outlier_removal: true
+  batch_size: 4
+
+# P4Transformer Integration Settings
+p4transformer:
+  model_name: "p4transformer"
+  model_path: null  # Path to local model if available
+  max_points: 2048
+  enhancement_strength: 0.7
+  denoising_strength: 0.5
+  completion_threshold: 0.3
+  batch_size: 4
+  use_temporal_consistency: true
+  temporal_weight: 0.3
+
+# Enhancement Pipeline Settings
+enhancement:
+  # Denoising parameters
+  denoising_enabled: true
+  denoising_radius: 0.02
+  denoising_max_neighbors: 30
+  outlier_removal_enabled: true
+  outlier_std_ratio: 2.0
+  outlier_min_neighbors: 20
+  
+  # Completion parameters
+  completion_enabled: true
+  completion_density_threshold: 0.1
+  completion_max_fill_distance: 0.05
+  
+  # Feature enhancement parameters
+  feature_enhancement_enabled: true
+  edge_enhancement_strength: 0.3
+  surface_smoothing_strength: 0.1
+  
+  # Temporal consistency parameters
+  temporal_consistency_enabled: true
+  temporal_smoothing_weight: 0.2
+  motion_threshold: 0.01
+  
+  # General parameters
+  voxel_size: 0.005
+  min_points_threshold: 100
+
+# Reconstruction Pipeline Settings
+reconstruction:
+  # Gaussian initialization parameters
+  gaussian_density_factor: 1.5
+  initial_scale: 0.01
+  initial_opacity: 0.8
+  
+  # Optimization parameters
+  optimization_enabled: true
+  num_optimization_steps: 1000
+  learning_rate: 0.001
+  position_lr_factor: 1.0
+  scale_lr_factor: 0.5
+  rotation_lr_factor: 0.5
+  opacity_lr_factor: 0.1
+  color_lr_factor: 0.1
+  
+  # Refinement parameters
+  iterative_refinement: true
+  refinement_iterations: 3
+  refinement_threshold: 0.01
+  
+  # Quality assessment
+  quality_metrics_enabled: true
+  comparison_with_original: true
+  
+  # Output parameters
+  save_intermediate_steps: false
+  export_formats: ["pth", "ply"]
+
+# Hardware and Performance Settings
+hardware:
+  device: "auto"  # "auto", "cuda", "cpu"
+  use_mixed_precision: true
+  num_workers: 4
+  prefetch_factor: 2
+
+# Logging and Output Settings
+logging:
+  level: "INFO"  # "DEBUG", "INFO", "WARNING", "ERROR"
+  save_logs: true
+  log_dir: "logs/transformer"
+
+output:
+  base_dir: "output/transformer_enhancement"
+  save_intermediate: false
+  create_visualizations: true
+  export_metrics: true
+
+# Quality Metrics Settings
+quality_metrics:
+  enabled: true
+  metrics:
+    - "reconstruction_accuracy"
+    - "temporal_consistency" 
+    - "enhancement_effectiveness"
+    - "gaussian_quality"
+    - "point_cloud_density"
+    - "surface_smoothness"
+  
+  thresholds:
+    min_accuracy: 0.7
+    min_consistency: 0.6
+    min_quality: 0.5
