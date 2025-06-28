@@ -1,29 +1,21 @@
-# Gauge 3D - Video to 3D Reconstruction Pipeline
+# Gauge 3D - Video to 3D Reconstruction and Distance Measurement
 
-A comprehensive Python pipeline for converting videos into 3D reconstructions through depth estimation and 4D Gaussian splatting. Features interactive visualization tools and end-to-end processing from video frames to volumetric representations.
+A Python application that processes video files to extract frames, perform 3D reconstruction, generate point clouds, and measure distances between objects.
 
 ## Features
 
-### Core Pipeline
-- **Video Processing**: Extract frames with OpenCV and FFmpeg support
-- **Depth Estimation**: Generate depth maps using state-of-the-art models
-- **4D Gaussian Splatting**: Convert depth data to volumetric 3D representations
-- **Interactive Visualization**: Real-time depth map viewer with frame navigation
-
-### Processing Capabilities
-- **Hybrid Processing**: Automatic selection between OpenCV and FFmpeg
-- **Smart Sampling**: Uniform and adaptive frame sampling
-- **High Performance**: Optimized for large video datasets
-- **Quality Control**: Configurable output quality and resolution
-
-### Visualization Tools
-- **Depth Map Viewer**: Interactive frame-by-frame navigation
-- **Real-time Display**: Live depth visualization with statistics
-- **Export Options**: Save depth maps and visualizations
+- **Hybrid Processing**: Automatic selection between OpenCV and FFmpeg based on task
+- **FFmpeg Integration**: High-performance bulk frame extraction and scene detection
+- **OpenCV Precision**: Frame-by-frame control for precise extraction
+- **Smart Sampling**: Support for uniform and adaptive frame sampling
+- **Key Frame Detection**: Extract representative frames using scene detection or uniform sampling
+- **Performance Benchmarking**: Compare extraction speeds between methods
+- **Flexible Output**: Configurable frame intervals, quality, and resizing
+- **Multiple Formats**: Support for MP4, AVI, MOV, MKV, and more
 
 ## Installation
 
-This project uses `uv` for dependency management and requires several ML/CV libraries.
+This project uses `uv` for dependency management and supports both OpenCV and FFmpeg for video processing.
 
 ### Prerequisites
 
@@ -31,7 +23,7 @@ This project uses `uv` for dependency management and requires several ML/CV libr
 # Install uv (if not already installed)
 pip install uv
 
-# Install FFmpeg (recommended for video processing)
+# Install FFmpeg (recommended for better performance)
 # macOS:
 brew install ffmpeg
 
@@ -52,50 +44,37 @@ cd gauge_3d
 # Install Python dependencies
 uv sync
 
-# Set up environment variables (create .env file)
-echo 'HUGGINGFACE_HUB_TOKEN="your_token_here"' > .env
+# Set up environment variables (IMPORTANT for security!)
+cp .env.template .env
+# Edit .env and add your Hugging Face token:
+# HUGGINGFACE_HUB_TOKEN=hf_your_actual_token_here
 ```
 
-## Quick Start
+⚠️ **Security Note**: Never commit `.env` files or tokens to version control! The `.env` file is automatically ignored by Git.
 
-### 1. Extract Video Frames
+## Usage
+
+### Quick Start (Simplified Interface)
+
 ```bash
-# Extract frames from video
+# Extract frames from video (every 30th frame by default)
 python run.py extract video.mp4
 
-# Extract key frames for analysis
+# Extract 20 key frames
 python run.py extract video.mp4 --key-frames 20
+
+# Get video information
+python run.py info video.mp4
+
+# List all videos and extractions
+python run.py list
+
+# Analyze workspace
+python run.py analyze
 ```
 
-### 2. Generate Depth Maps
-```bash
-# Process extracted frames to generate depth maps
-python depth_estimation/main_pipeline.py --input vinput/video.mp4 --output output/
-```
+### Advanced Usage (Full Interface)
 
-### 3. View Depth Maps Interactively
-```bash
-# Launch interactive depth viewer
-python viewer/depth_viewer.py --dataset video_name
-
-# View specific frame
-python viewer/depth_viewer.py --dataset video_name --frame 100
-```
-
-### 4. Run Tests
-```bash
-# Run all tests
-python test.py
-
-# Test specific components
-python test.py --section environment
-python test.py --section depth
-python test.py --section visualization
-```
-
-## Advanced Usage
-
-### Video Frame Extraction
 ```bash
 # Extract every 30th frame (default)
 python main.py video.mp4
@@ -105,319 +84,171 @@ python main.py video.mp4 --frame-interval 10
 
 # Extract specific range of frames
 python main.py video.mp4 --start-frame 100 --end-frame 500
+```
 
-# Extract key frames uniformly distributed
+### Key Frame Extraction
+
+```bash
+# Extract 50 key frames uniformly distributed
 python main.py video.mp4 --key-frames 50
 
+# Extract key frames with adaptive sampling
+python main.py video.mp4 --key-frames 30 --method adaptive
+```
+
+### Advanced Options
+
+```bash
 # Use specific processing engine
 python main.py video.mp4 --engine ffmpeg --frame-interval 30
+python main.py video.mp4 --engine opencv --frame-interval 30
+
+# Benchmark performance
+python main.py video.mp4 --benchmark
+
+# Resize frames and save with custom quality
+python main.py video.mp4 --resize 1920 1080 --quality 85
+
+# Custom output directory
+python main.py video.mp4 --output-dir ./my_frames
+
+# Clean output directory before extraction
+python main.py video.mp4 --clean
+
+# Show video information only
+python main.py video.mp4 --info
 ```
 
-### Depth Estimation Pipeline
-```bash
-# Process video with depth estimation
-python depth_estimation/main_pipeline.py --input vinput/video.mp4 --output output/
+### Engine Selection
 
-# Custom depth model configuration
-python depth_estimation/main_pipeline.py --input video.mp4 --config depth_estimation/config/dav_config.yaml
-```
+The application automatically chooses the best processing method:
 
-### Interactive Depth Visualization
-```bash
-# View depth maps with navigation controls
-python viewer/depth_viewer.py --dataset 1080_60_fps
+- **FFmpeg**: Used for bulk extraction (frame intervals ≥ 10) - faster for large-scale processing
+- **OpenCV**: Used for precise frame selection and small intervals - better for frame-by-frame control
+- **Auto**: Intelligently switches between methods based on the task
 
-# Start from specific frame
-python viewer/depth_viewer.py --dataset 1080_60_fps --frame 150
-```
+You can force a specific engine with `--engine ffmpeg` or `--engine opencv`.
 
-### Testing and Validation
-```bash
-# Run comprehensive test suite
-python test.py
+### Command Line Options
 
-# Test specific components
-python test.py --section environment     # Check dependencies
-python test.py --section depth         # Test depth estimation
-python test.py --section gaussian      # Test 4D Gaussian components
-python test.py --section visualization # Test viewers
-python test.py --section integration   # Test component integration
-
-# Verbose testing output
-python test.py --verbose
-```
+- `video_path`: Path to the input video file (required)
+- `--output-dir, -o`: Output directory for extracted frames (default: output/frames)
+- `--frame-interval, -i`: Extract every nth frame (default: 30)
+- `--start-frame, -s`: Frame number to start extraction (default: 0)
+- `--end-frame, -e`: Frame number to end extraction (default: end of video)
+- `--resize, -r`: Resize frames to specified WIDTH HEIGHT
+- `--quality, -q`: JPEG quality for saved frames (0-100, default: 95)
+- `--key-frames, -k`: Extract NUM key frames instead of regular extraction
+- `--method, -m`: Key frame sampling method (uniform, adaptive)
+- `--clean`: Clean output directory before extraction
+- `--info`: Show video information only, don't extract frames
+- `--engine, -x`: Processing engine (auto, opencv, ffmpeg)
+- `--prefer-opencv`: Prefer OpenCV over FFmpeg when both available
+- `--benchmark`: Benchmark available extraction methods
+- `--verbose, -v`: Enable verbose output
 
 ## Project Structure
 
 ```
 gauge_3d/
-├── README.md              # Project documentation
-├── pyproject.toml         # Dependencies and project config
-├── test.py               # Consolidated test suite
-├── main.py               # Video frame extraction
-├── run.py                # Simplified interface
-├── utils.py              # Analysis utilities
-│
-├── src/                  # Core video processing
-│   └── video_processor.py
-│
-├── depth_estimation/     # Depth map generation
-│   ├── depth_pipeline.py
-│   ├── main_pipeline.py
-│   └── config/
-│       └── dav_config.yaml
-│
-├── viewer/               # Visualization tools
+├── main.py                 # Full-featured main entry point
+├── run.py                  # Simplified quick commands interface
+├── utils.py                # Utility functions and analysis tools
+├── src/
 │   ├── __init__.py
-│   └── depth_viewer.py   # Interactive depth map viewer
-│
-├── 4d_gaussian/          # 4D Gaussian splatting
-│   ├── config/
-│   ├── data_preparation/
-│   ├── gaussian_generation/
-│   └── run_4d_gaussian.py
-│
-├── vinput/               # Input videos
+│   └── video_processor.py  # Core frame extraction functionality
+├── vinput/                 # Input videos directory
 │   ├── 1080_60_fps.mp4
 │   └── 4k_30_fps.mp4
-│
-└── output/               # Generated outputs
-    ├── frames/           # Extracted video frames
-    ├── depth_maps/       # Generated depth maps
-    ├── depth_previews/   # Depth visualization exports
-    └── gaussian_reconstruction/  # 4D Gaussian outputs
+├── output/                 # Generated output
+│   └── frames/            # Extracted frames organized by video
+│       ├── video_name_1/
+│       └── video_name_2/
+├── pyproject.toml         # Project configuration and dependencies
+├── uv.lock                # Dependency lock file
+└── README.md              # This file
 ```
+
+## Available Scripts
+
+- **`run.py`**: Simplified interface for common operations
+- **`main.py`**: Full-featured frame extraction with all options
+- **`utils.py`**: Utilities for analysis and workspace management
 
 ## Dependencies
 
-### Core Libraries
-- **PyTorch**: Deep learning framework for depth estimation
-- **OpenCV**: Video processing and computer vision
-- **NumPy**: Numerical computing
-- **Matplotlib**: Plotting and visualization
+### Python Packages (managed by uv)
+- **opencv-python**: Video processing and frame extraction
+- **numpy**: Numerical operations
 - **Pillow**: Image processing
-- **Tkinter**: GUI framework for interactive viewers
+- **tqdm**: Progress bars
 
-### Machine Learning
-- **Transformers**: Hugging Face transformer models
-- **Diffusers**: Diffusion models for depth estimation
-- **Kornia**: Computer vision operations
-- **Trimesh**: 3D mesh processing
-
-### Visualization
-- **Seaborn**: Statistical data visualization
-- **Pandas**: Data analysis and manipulation
-- **Plotly**: Interactive plotting (optional)
-
-### Optional Performance
+### External Tools (optional but recommended)
 - **FFmpeg**: High-performance video processing
-- **Open3D**: 3D data processing (optional)
+  - Faster bulk frame extraction
+  - Advanced scene detection for key frames
+  - Better codec support
+  - Hardware acceleration support
 
-## Interactive Depth Viewer
+## Supported Video Formats
 
-The depth viewer provides real-time navigation through depth map sequences:
-
-### Navigation Controls
-- **Arrow Keys**: Previous/Next frame navigation
-- **Mouse**: Click navigation buttons
-- **Slider**: Scrub through entire sequence
-- **Jump**: Enter specific frame numbers
-- **Keyboard Shortcuts**:
-  - `←` / `→`: Navigate frames
-  - `Enter`: Jump to entered frame number
-
-### Features
-- Real-time depth statistics (min/max/mean)
-- Automatic image scaling for display
-- Frame information overlay
-- Smooth navigation with large datasets
-
-## Testing
-
-The project includes a comprehensive test suite that validates:
-
-### Environment Tests
-- Python version compatibility
-- Core dependency availability
-- CUDA/GPU detection
-- System requirements
-
-### Component Tests
-- Depth estimation pipeline
-- 4D Gaussian data structures
-- Visualization tools
-- File I/O operations
-
-### Integration Tests
-- End-to-end pipeline functionality
-- Output directory management
-- Cross-component compatibility
-
-Run tests regularly to ensure system health:
-```bash
-python test.py  # Run all tests
-```
-
-## Workflow Examples
-
-### Complete 3D Reconstruction Pipeline
-```bash
-# 1. Extract frames from video
-python run.py extract input_video.mp4 --key-frames 50
-
-# 2. Generate depth maps
-python depth_estimation/main_pipeline.py --input vinput/input_video.mp4
-
-# 3. Visualize results interactively
-python viewer/depth_viewer.py --dataset input_video
-
-# 4. Run quality checks
-python test.py --section depth
-```
-
-### Quick Analysis Workflow
-```bash
-# Extract representative frames for quick analysis
-python main.py video.mp4 --key-frames 20
-
-# View depth estimation results
-python viewer/depth_viewer.py
-
-# Check system health
-python test.py --section environment
-```
-
-### High-Quality Production Workflow
-```bash
-# Extract high-quality frames
-python main.py video.mp4 --frame-interval 5 --quality 100 --resize 1920 1080
-
-# Process with depth estimation
-python depth_estimation/main_pipeline.py --input video.mp4 --output production_output/
-
-# Validate results
-python test.py --section integration
-```
-
-## Supported Formats
-
-### Video Input
-- MP4 (.mp4) - Recommended
+- MP4 (.mp4)
 - AVI (.avi)
 - MOV (.mov)
 - MKV (.mkv)
-- WebM (.webm)
 - WMV (.wmv)
 - FLV (.flv)
+- WebM (.webm)
+- M4V (.m4v)
 
-### Output Formats
-- **Frames**: JPEG, PNG
-- **Depth Maps**: NumPy arrays (.npy)
-- **Visualizations**: PNG, JPEG
-- **3D Data**: PLY, OBJ (future)
+## Examples
 
-## Performance Optimization
-
-### Hardware Recommendations
-- **GPU**: CUDA-compatible for depth estimation acceleration
-- **RAM**: 16GB+ for large video processing
-- **Storage**: SSD recommended for frame I/O operations
-
-### Processing Tips
-- Use key frame extraction for faster initial analysis
-- Enable GPU acceleration when available
-- Process videos in smaller segments for memory efficiency
-- Use FFmpeg for bulk frame extraction (faster than OpenCV)
-
-## Troubleshooting
-
-### Common Issues
-
-#### Missing Dependencies
+### Extract frames for 3D reconstruction
 ```bash
-# Check all dependencies
-python test.py --section environment
-
-# Install missing packages
-uv sync
+# For stereo vision or SfM, extract every 5th frame
+python main.py video.mp4 --frame-interval 5 --resize 1920 1080
 ```
 
-#### CUDA/GPU Issues
+### Quick preview with key frames
 ```bash
-# Check GPU availability
-python -c "import torch; print(torch.cuda.is_available())"
-
-# Run CPU-only mode if needed
-export CUDA_VISIBLE_DEVICES=""
+# Extract 20 representative frames for quick analysis
+python main.py video.mp4 --key-frames 20
 ```
 
-#### Memory Issues
+### High-quality extraction for detailed analysis
 ```bash
-# Process smaller frame batches
-python main.py video.mp4 --frame-interval 30  # Fewer frames
-
-# Monitor memory usage
-python test.py --section integration --verbose
+# Extract frames with maximum quality
+python main.py video.mp4 --frame-interval 1 --quality 100
 ```
 
-#### Visualization Issues
+### Performance Comparison
 ```bash
-# Test GUI dependencies
-python test.py --section visualization
+# Benchmark both methods
+python main.py video.mp4 --benchmark
 
-# Use alternative display backend
-export MPLBACKEND=TkAgg
+# Example results:
+# OPENCV:  2.3 frames/sec
+# FFMPEG:  3.9 frames/sec (70% faster)
 ```
 
-## Development
+## Future Enhancements
 
-### Code Organization
-- **Modular Design**: Each component is independently testable
-- **Configuration-Driven**: YAML configs for pipeline parameters
-- **Error Handling**: Comprehensive error reporting and recovery
-- **Logging**: Detailed logging for debugging and monitoring
+This is the first phase of the project. Future modules will include:
 
-### Contributing
+- 3D reconstruction algorithms (Structure from Motion, Stereo Vision)
+- Point cloud generation and processing
+- Distance measurement tools
+- Object detection and tracking
+- Real-time processing capabilities
+
+## Contributing
+
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Run tests (`python test.py`)
-4. Commit changes (`git commit -m 'Add amazing feature'`)
-5. Push to branch (`git push origin feature/amazing-feature`)
-6. Open a Pull Request
-
-### Testing Guidelines
-- Run full test suite before submitting PRs
-- Add tests for new functionality
-- Ensure GPU and CPU compatibility
-- Test with different video formats and sizes
-
-## Future Roadmap
-
-### Phase 2: Enhanced 3D Reconstruction
-- ✅ Depth estimation pipeline
-- ✅ Interactive visualization
-- 🔄 4D Gaussian splatting optimization
-- 📅 Real-time processing
-
-### Phase 3: Advanced Features
-- 📅 Multi-view reconstruction
-- 📅 Temporal consistency optimization
-- 📅 Object tracking and measurement
-- 📅 Export to standard 3D formats
-
-### Phase 4: Production Features
-- 📅 Web interface
-- 📅 Cloud processing integration
-- 📅 Real-time streaming support
-- 📅 Mobile app integration
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Depth estimation models from Hugging Face
-- 4D Gaussian Splatting research community
-- OpenCV and FFmpeg communities
-- PyTorch ecosystem contributors
