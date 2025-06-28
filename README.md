@@ -4,25 +4,44 @@ A Python application that processes video files to extract frames, perform 3D re
 
 ## Features
 
-- **Video Frame Extraction**: Extract frames from various video formats
+- **Hybrid Processing**: Automatic selection between OpenCV and FFmpeg based on task
+- **FFmpeg Integration**: High-performance bulk frame extraction and scene detection
+- **OpenCV Precision**: Frame-by-frame control for precise extraction
 - **Smart Sampling**: Support for uniform and adaptive frame sampling
-- **Key Frame Detection**: Extract representative frames for efficient processing
+- **Key Frame Detection**: Extract representative frames using scene detection or uniform sampling
+- **Performance Benchmarking**: Compare extraction speeds between methods
 - **Flexible Output**: Configurable frame intervals, quality, and resizing
 - **Multiple Formats**: Support for MP4, AVI, MOV, MKV, and more
 
 ## Installation
 
-This project uses `uv` for dependency management. Make sure you have `uv` installed:
+This project uses `uv` for dependency management and supports both OpenCV and FFmpeg for video processing.
+
+### Prerequisites
 
 ```bash
 # Install uv (if not already installed)
 pip install uv
 
+# Install FFmpeg (recommended for better performance)
+# macOS:
+brew install ffmpeg
+
+# Ubuntu/Debian:
+sudo apt update && sudo apt install ffmpeg
+
+# Windows:
+# Download from https://ffmpeg.org/download.html
+```
+
+### Project Setup
+
+```bash
 # Clone the repository
 git clone <repository-url>
 cd gauge_3d
 
-# Install dependencies
+# Install Python dependencies
 uv sync
 ```
 
@@ -73,6 +92,13 @@ python main.py video.mp4 --key-frames 30 --method adaptive
 ### Advanced Options
 
 ```bash
+# Use specific processing engine
+python main.py video.mp4 --engine ffmpeg --frame-interval 30
+python main.py video.mp4 --engine opencv --frame-interval 30
+
+# Benchmark performance
+python main.py video.mp4 --benchmark
+
 # Resize frames and save with custom quality
 python main.py video.mp4 --resize 1920 1080 --quality 85
 
@@ -85,6 +111,16 @@ python main.py video.mp4 --clean
 # Show video information only
 python main.py video.mp4 --info
 ```
+
+### Engine Selection
+
+The application automatically chooses the best processing method:
+
+- **FFmpeg**: Used for bulk extraction (frame intervals ≥ 10) - faster for large-scale processing
+- **OpenCV**: Used for precise frame selection and small intervals - better for frame-by-frame control
+- **Auto**: Intelligently switches between methods based on the task
+
+You can force a specific engine with `--engine ffmpeg` or `--engine opencv`.
 
 ### Command Line Options
 
@@ -99,6 +135,9 @@ python main.py video.mp4 --info
 - `--method, -m`: Key frame sampling method (uniform, adaptive)
 - `--clean`: Clean output directory before extraction
 - `--info`: Show video information only, don't extract frames
+- `--engine, -x`: Processing engine (auto, opencv, ffmpeg)
+- `--prefer-opencv`: Prefer OpenCV over FFmpeg when both available
+- `--benchmark`: Benchmark available extraction methods
 - `--verbose, -v`: Enable verbose output
 
 ## Project Structure
@@ -131,10 +170,18 @@ gauge_3d/
 
 ## Dependencies
 
+### Python Packages (managed by uv)
 - **opencv-python**: Video processing and frame extraction
 - **numpy**: Numerical operations
 - **Pillow**: Image processing
 - **tqdm**: Progress bars
+
+### External Tools (optional but recommended)
+- **FFmpeg**: High-performance video processing
+  - Faster bulk frame extraction
+  - Advanced scene detection for key frames
+  - Better codec support
+  - Hardware acceleration support
 
 ## Supported Video Formats
 
@@ -165,6 +212,16 @@ python main.py video.mp4 --key-frames 20
 ```bash
 # Extract frames with maximum quality
 python main.py video.mp4 --frame-interval 1 --quality 100
+```
+
+### Performance Comparison
+```bash
+# Benchmark both methods
+python main.py video.mp4 --benchmark
+
+# Example results:
+# OPENCV:  2.3 frames/sec
+# FFMPEG:  3.9 frames/sec (70% faster)
 ```
 
 ## Future Enhancements

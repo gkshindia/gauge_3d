@@ -16,7 +16,7 @@ from pathlib import Path
 # Add src directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-from video_processor import VideoFrameExtractor
+from video_processor import HybridVideoProcessor
 
 
 def main():
@@ -66,6 +66,12 @@ Examples:
     parser.add_argument("--method", "-m", choices=["uniform", "adaptive"], default="uniform",
                        help="Key frame sampling method (default: uniform)")
     
+    # Processing method options
+    parser.add_argument("--engine", "-x", choices=["auto", "opencv", "ffmpeg"], default="auto",
+                       help="Processing engine to use (default: auto)")
+    parser.add_argument("--prefer-opencv", action="store_true",
+                       help="Prefer OpenCV over FFmpeg when both available")
+    
     # Utility options
     parser.add_argument("--clean", action="store_true",
                        help="Clean output directory before extraction")
@@ -73,6 +79,8 @@ Examples:
                        help="Show video information only, don't extract frames")
     parser.add_argument("--verbose", "-v", action="store_true",
                        help="Enable verbose output")
+    parser.add_argument("--benchmark", action="store_true",
+                       help="Benchmark available extraction methods")
     
     args = parser.parse_args()
     
@@ -93,12 +101,13 @@ Examples:
         print(f"Supported extensions: {', '.join(valid_extensions)}")
     
     try:
-        # Initialize frame extractor
-        extractor = VideoFrameExtractor(args.output_dir)
+        # Initialize processor
+        prefer_ffmpeg = not args.prefer_opencv
+        processor = HybridVideoProcessor(args.output_dir, prefer_ffmpeg=prefer_ffmpeg)
         
         # Show video info if requested
         if args.info:
-            video_info = extractor.get_video_info(str(video_path))
+            video_info = processor.get_video_info(str(video_path))
             print("Video Information:")
             print("=" * 50)
             print(f"File: {video_path}")
@@ -109,32 +118,52 @@ Examples:
             print(f"Codec: {video_info['fourcc']}")
             return
         
+        # Benchmark if requested
+        if args.benchmark:
+            print("Benchmarking extraction methods...")
+            results = processor.benchmark_methods(str(video_path), args.frame_interval)
+            
+            print("\nBenchmark Results:")
+            print("=" * 50)
+            for method, result in results.items():
+                print(f"{method.upper()}:")
+                if 'error' in result:
+                    print(f"  Error: {result['error']}")
+                else:
+                    print(f"  Time: {result['time']:.2f}s")
+                    print(f"  Frames: {result['frames']}")
+                    print(f"  Processing rate: {result['fps']:.1f} frames/sec")
+                print()
+            return
+        
         # Clean output directory if requested
         if args.clean:
             print("Cleaning output directory...")
-            extractor.clean_output_dir()
+            processor.opencv_processor.clean_output_dir()
         
         print(f"Processing video: {video_path}")
         print(f"Output directory: {args.output_dir}")
+        print(f"Using engine: {args.engine}")
         
         # Extract frames based on mode
         if args.key_frames:
             print(f"Extracting {args.key_frames} key frames using {args.method} method...")
-            extracted_files = extractor.extract_key_frames(
+            extracted_files = processor.extract_key_frames(
                 str(video_path), 
                 num_frames=args.key_frames,
-                method=args.method
+                method=args.method if args.engine == "auto" else args.engine
             )
         else:
             print(f"Extracting frames with interval {args.frame_interval}...")
             resize_tuple = tuple(args.resize) if args.resize else None
-            extracted_files = extractor.extract_frames(
+            extracted_files = processor.extract_frames(
                 str(video_path),
                 frame_interval=args.frame_interval,
                 start_frame=args.start_frame,
                 end_frame=args.end_frame,
                 resize=resize_tuple,
-                quality=args.quality
+                quality=args.quality,
+                method=args.engine
             )
         
         print("\n" + "=" * 50)
