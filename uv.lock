@@ -177,13 +177,17 @@ dependencies = [
     { name = "diffusers" },
     { name = "einops" },
     { name = "huggingface-hub" },
+    { name = "kornia" },
     { name = "matplotlib" },
     { name = "numpy" },
     { name = "opencv-python" },
     { name = "pillow" },
+    { name = "plyfile" },
+    { name = "psutil" },
     { name = "python-dotenv" },
     { name = "pyyaml" },
     { name = "requests" },
+    { name = "roma" },
     { name = "safetensors" },
     { name = "scikit-image" },
     { name = "scipy" },
@@ -192,6 +196,7 @@ dependencies = [
     { name = "torchvision" },
     { name = "tqdm" },
     { name = "transformers" },
+    { name = "trimesh" },
 ]
 
 [package.metadata]
@@ -200,13 +205,17 @@ requires-dist = [
     { name = "diffusers", specifier = ">=0.20.0" },
     { name = "einops", specifier = ">=0.6.0" },
     { name = "huggingface-hub", specifier = ">=0.33.1" },
+    { name = "kornia", specifier = ">=0.6.12" },
     { name = "matplotlib", specifier = ">=3.7.0" },
     { name = "numpy", specifier = ">=1.24.0" },
     { name = "opencv-python", specifier = ">=4.8.0" },
     { name = "pillow", specifier = ">=10.0.0" },
+    { name = "plyfile", specifier = ">=0.7.4" },
+    { name = "psutil", specifier = ">=5.9.0" },
     { name = "python-dotenv", specifier = ">=1.1.1" },
     { name = "pyyaml", specifier = ">=6.0.2" },
     { name = "requests", specifier = ">=2.32.4" },
+    { name = "roma", specifier = ">=1.2.0" },
     { name = "safetensors", specifier = ">=0.3.0" },
     { name = "scikit-image", specifier = ">=0.21.0" },
     { name = "scipy", specifier = ">=1.10.0" },
@@ -215,6 +224,7 @@ requires-dist = [
     { name = "torchvision", specifier = ">=0.15.0" },
     { name = "tqdm", specifier = ">=4.65.0" },
     { name = "transformers", specifier = ">=4.30.0" },
+    { name = "trimesh", specifier = ">=3.21.0" },
 ]
 
 [[package]]
@@ -331,6 +341,38 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/05/f9/27e94c1b3eb29e6933b6986ffc5fa1177d2cd1f0c8efc5f02c91c9ac61de/kiwisolver-1.4.8-cp313-cp313t-musllinux_1_2_ppc64le.whl", hash = "sha256:151dffc4865e5fe6dafce5480fab84f950d14566c480c08a53c663a0020504b6", size = 2390661, upload-time = "2024-12-24T18:30:34.939Z" },
     { url = "https://files.pythonhosted.org/packages/d9/d4/3c9735faa36ac591a4afcc2980d2691000506050b7a7e80bcfe44048daa7/kiwisolver-1.4.8-cp313-cp313t-musllinux_1_2_s390x.whl", hash = "sha256:577facaa411c10421314598b50413aa1ebcf5126f704f1e5d72d7e4e9f020d90", size = 2546710, upload-time = "2024-12-24T18:30:37.281Z" },
     { url = "https://files.pythonhosted.org/packages/4c/fa/be89a49c640930180657482a74970cdcf6f7072c8d2471e1babe17a222dc/kiwisolver-1.4.8-cp313-cp313t-musllinux_1_2_x86_64.whl", hash = "sha256:be4816dc51c8a471749d664161b434912eee82f2ea66bd7628bd14583a833e85", size = 2349213, upload-time = "2024-12-24T18:30:40.019Z" },
+]
+
+[[package]]
+name = "kornia"
+version = "0.8.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "kornia-rs" },
+    { name = "packaging" },
+    { name = "torch" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d7/49/3c3aa9c68262b87551d50cdeefff027394316abfe11937a729371a39f50a/kornia-0.8.1.tar.gz", hash = "sha256:9ce5a54a11df661794934a293f89f8b8d49e83dd09b0b9419f6082ab07afe433", size = 652542, upload-time = "2025-05-08T11:13:25.485Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/80/95/a2e359cd08ea24498be59dcd5980e290cdf658ce534bcb7ae13b8ef694e6/kornia-0.8.1-py2.py3-none-any.whl", hash = "sha256:5dcb00faa795dfb45a3630d771387290bc4f40473451352ca250e5bcc81af3d1", size = 1078646, upload-time = "2025-05-08T11:13:22.826Z" },
+]
+
+[[package]]
+name = "kornia-rs"
+version = "0.1.9"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/de/28/6e0cc55dfe9967228cfacbeee79d2a31d8ed5bd6bcc478ec0a0f790f1e71/kornia_rs-0.1.9.tar.gz", hash = "sha256:c7e45e84eb3c2454055326f86329e48a68743507460fb7e39315397fa6eeb9a0", size = 108371, upload-time = "2025-05-07T11:42:08.505Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ad/12/83ebd43c8fb42d5ad1e66ce66af9c80e9b99e95758f7b0b1ceb8be8eebde/kornia_rs-0.1.9-cp313-cp313-macosx_10_12_x86_64.whl", hash = "sha256:e82f5d90ad5b3d02d28535d19bf612e25ca559003d56fad1d12cd173be5d8418", size = 2554277, upload-time = "2025-05-07T11:42:54.354Z" },
+    { url = "https://files.pythonhosted.org/packages/6b/b3/d61868697048f92df3b1ca0fbee791b92c305ba7fae3755521d44dd9ffe1/kornia_rs-0.1.9-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:876f0805ed8d05bd94d6b9a6c43161cdc74bc5c4508f5b737d6975d1dcf9016d", size = 2299896, upload-time = "2025-05-07T11:42:42.859Z" },
+    { url = "https://files.pythonhosted.org/packages/98/3a/5f37388ed4fae3f34702e1af25398cdd7c071b4bb250f780e7a2a6378e70/kornia_rs-0.1.9-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:00021bb1941766e1e9e8c2cdbebcf33a08f8de3586e6efc791b9580a7e52b5ed", size = 2486072, upload-time = "2025-05-07T11:42:14.6Z" },
+    { url = "https://files.pythonhosted.org/packages/c3/d8/a286db51c1269f632b3e4fdb08cb7319476dbe576796be19fdfbdfd4df1c/kornia_rs-0.1.9-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9feaa6d410bc4d0609f3c1f2c0c010743706c2f5eed6f5ded10f2b8fec32acdf", size = 2760634, upload-time = "2025-05-07T11:42:28.998Z" },
+    { url = "https://files.pythonhosted.org/packages/9a/6f/c3d7da7a06b71a1eb1eb017a1944bcdc9504ef5cdbb0e3345aceabd24b7a/kornia_rs-0.1.9-cp313-cp313-win_amd64.whl", hash = "sha256:4d063e9d74d2b198f080940cd1679cfb66004cd59bb7cc20e0bcf5874ce3d200", size = 2276574, upload-time = "2025-05-07T11:43:06.117Z" },
+    { url = "https://files.pythonhosted.org/packages/46/0d/09cb9deeac45e1ac89aacfa1a9417eba3a27015282ca841f4df197e727b2/kornia_rs-0.1.9-cp313-cp313t-macosx_10_12_x86_64.whl", hash = "sha256:f8d03da3dba89fd290f4df012f49262cde128e3682632b5c498b34909d875190", size = 2555142, upload-time = "2025-05-07T11:42:56.093Z" },
+    { url = "https://files.pythonhosted.org/packages/db/88/679db8feae7e2ad19317aaef84d6ff2129a37c601b47012ff67041daf7e3/kornia_rs-0.1.9-cp313-cp313t-macosx_11_0_arm64.whl", hash = "sha256:cef15e7db4cd05ebedc25cd62616c38346f71f7e8a2fb751feacc8726e7e417e", size = 2301310, upload-time = "2025-05-07T11:42:44.105Z" },
+    { url = "https://files.pythonhosted.org/packages/19/58/1ba746ac8a8a25d30bf3205c59b7a008dbcbe95533d21a33ad9097afe56d/kornia_rs-0.1.9-cp313-cp313t-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0d6ea40aa2027f62e90c590112fc4be4a787092359ed041479d2b015c0483c97", size = 2487761, upload-time = "2025-05-07T11:42:16.59Z" },
+    { url = "https://files.pythonhosted.org/packages/0c/53/84462d5aaf0ad52cb30791d38e144ce8a79519c201ff204f903d54f1dd46/kornia_rs-0.1.9-cp313-cp313t-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e9282a70c9e81710f04fdb23617c73191324ccc070c7f96d62efb5bf66dc242a", size = 2758585, upload-time = "2025-05-07T11:42:30.465Z" },
+    { url = "https://files.pythonhosted.org/packages/5e/51/755dda17b63604816a34ee3b9336d1c6ccb54f3e9bcbc8aafd98412fcb8f/kornia_rs-0.1.9-cp313-cp313t-win_amd64.whl", hash = "sha256:cd6b9860ca2fd6103340f4f977f74fa96562d89563e36c00059f2d96c7cea464", size = 2275851, upload-time = "2025-05-07T11:43:07.424Z" },
 ]
 
 [[package]]
@@ -642,6 +684,18 @@ wheels = [
 ]
 
 [[package]]
+name = "plyfile"
+version = "1.1.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/3e/2e/212e061f2dfa6c6510d4d144819a3e23039c6d4c30731bd023c32da15d8c/plyfile-1.1.2.tar.gz", hash = "sha256:bfb2d88cb3e369cae56df8cf4d107fbfd7beef49ed6cf8ef6b2931b321af9def", size = 36078, upload-time = "2025-06-01T07:35:24.462Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/55/48/600cc57763e82a7d305f816d79fe8267c43e74487e144744349c2aa9f6fd/plyfile-1.1.2-py3-none-any.whl", hash = "sha256:f5529face448b14e1927382bb05231827268650f3411b467b17bd6438eb0b83d", size = 36357, upload-time = "2025-06-01T07:35:23.185Z" },
+]
+
+[[package]]
 name = "psutil"
 version = "7.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -739,6 +793,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/e1/0a/929373653770d8a0d7ea76c37de6e41f11eb07559b103b1c02cafb3f7cf8/requests-2.32.4.tar.gz", hash = "sha256:27d0316682c8a29834d3264820024b62a36942083d52caf2f14c0591336d3422", size = 135258, upload-time = "2025-06-09T16:43:07.34Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/7c/e4/56027c4a6b4ae70ca9de302488c5ca95ad4a39e190093d6c1a8ace08341b/requests-2.32.4-py3-none-any.whl", hash = "sha256:27babd3cda2a6d50b30443204ee89830707d396671944c998b5975b031ac2b2c", size = 64847, upload-time = "2025-06-09T16:43:05.728Z" },
+]
+
+[[package]]
+name = "roma"
+version = "1.5.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/71/fe/65ce5787a910ae7a583750af20910ec0eacb24779430732f562fd77fcda6/roma-1.5.3.tar.gz", hash = "sha256:186973e0711ff7ae0225b47a9fa79489a37f4e6d4aa1074199a716f2970a021c", size = 31546, upload-time = "2025-06-03T09:18:51.433Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2d/b1/ae41158319460a38929bfa3a3c64fda320938ddc7477609e9ec967d2a988/roma-1.5.3-py3-none-any.whl", hash = "sha256:9947590dbb1d2366e744795af01b00a964c40c0f07213aa1cf4fd8c63eac28e1", size = 24980, upload-time = "2025-06-03T09:18:50.275Z" },
 ]
 
 [[package]]
@@ -989,6 +1052,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/e8/40/f2d2c3bcf5c6135027cab0fd7db52f6149a1c23acc4e45f914c43d362386/transformers-4.53.0.tar.gz", hash = "sha256:f89520011b4a73066fdc7aabfa158317c3934a22e3cd652d7ffbc512c4063841", size = 9177265, upload-time = "2025-06-26T16:10:54.729Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/5e/0c/68d03a38f6ab2ba2b2829eb11b334610dd236e7926787f7656001b68e1f2/transformers-4.53.0-py3-none-any.whl", hash = "sha256:7d8039ff032c01a2d7f8a8fe0066620367003275f023815a966e62203f9f5dd7", size = 10821970, upload-time = "2025-06-26T16:10:51.505Z" },
+]
+
+[[package]]
+name = "trimesh"
+version = "4.6.13"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/68/c2/b97f9fea123b608d0027abb3bb87cfbecfb974ad8f1f034641e5fe4f0312/trimesh-4.6.13.tar.gz", hash = "sha256:2950dd6c3c9c9948a652f7a2966319b47130467bbbf447b254e02b9d90c94f14", size = 804497, upload-time = "2025-06-27T18:34:27.839Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/90/2f/03e3829bf98fdf77b8669174957f47e8a977385ffd2c810e818a603a32ca/trimesh-4.6.13-py3-none-any.whl", hash = "sha256:b20b4c3ff03d185ec5b2b0e3adce6e75d8d73508861f2c1be3e40ab47cf18fee", size = 712440, upload-time = "2025-06-27T18:34:24.768Z" },
 ]
 
 [[package]]

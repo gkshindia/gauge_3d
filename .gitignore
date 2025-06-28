@@ -25,3 +25,12 @@ wheels/
 *.pt
 *.onnx
 *.npy
+
+# 4D Gaussian outputs
+*.ply
+*.npz
+*.gaussian
+
+# Environment and logs
+.env
+*.log
